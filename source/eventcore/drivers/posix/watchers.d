@@ -77,7 +77,8 @@ final class InotifyEventDriverWatchers(Events : EventDriverEvents) : EventDriver
 			m_loop.setNotifyCallback!(EventType.read)(fd, null);
 			m_loop.unregisterFD(fd, EventMask.read);
 			m_loop.clearFD!WatcherSlot(fd);
-			m_watches.remove(descriptor);
+			m_watches[descriptor] = WatchState.init;
+			//m_watches.remove(descriptor);
 			/*errnoEnforce(*/close(cast(int)fd)/* == 0)*/;
 			return false;
 		}
@@ -299,7 +300,8 @@ final class FSEventsEventDriverWatchers(Events : EventDriverEvents) : EventDrive
 		auto slot = descriptor in m_watches;
 		if (!--slot.refCount) {
 			destroyStream(slot.stream);
-			m_watches.remove(descriptor);
+			m_watches[descriptor] = WatcherSlot.init;
+			//m_watches.remove(descriptor);
 			m_events.loop.m_waiterCount--;
 			return false;
 		}

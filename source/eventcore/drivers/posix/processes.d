@@ -276,7 +276,8 @@ final class PosixEventDriverProcesses(Loop : PosixEventLoop) : EventDriverProces
 				if (info.userDataDestructor)
 					() @trusted { info.userDataDestructor(info.userData.ptr); } ();
 
-				() @trusted { s_processes.remove(cast(int)pid.value); } ();
+				() @trusted { s_processes[cast(int) pid.value] = ProcessInfo.init; } ();
+				//() @trusted { s_processes.remove(cast(int)pid.value); } ();
 				ret = false;
 			} else ret = true;
 		});

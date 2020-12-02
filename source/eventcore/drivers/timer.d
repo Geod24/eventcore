@@ -197,7 +197,8 @@ final class LoopTimeoutTimerDriver : EventDriverTimers {
 
 		if (!tm.refCount) {
 			if (tm.pending) stop(tm.id);
-			m_timers.remove(descriptor);
+			m_timers[descriptor] = null;
+			//m_timers.remove(descriptor);
 			() @trusted {
 				scope (failure) assert(false);
 				ms_allocator.dispose(tm);
